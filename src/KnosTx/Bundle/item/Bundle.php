@@ -10,9 +10,8 @@ use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\nbt\tag\CompoundTag;
 
-public const BUNDLE = 99999;
-
 class Bundle extends Item implements InventoryHolder{
+    public const BUNDLE = 99999;
     private const MAX_CAPACITY = 64;
     private SimpleInventory $inventory;
 
