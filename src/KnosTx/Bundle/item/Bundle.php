@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace KnosTx\Bundle\item;
 
 use pocketmine\item\Item;
-use pocketmine\item\ItemIdentifier;
+use pocketmine\item\VanillaItems;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\nbt\tag\ListTag;
 
 class Bundle extends Item implements InventoryHolder{
-    public const BUNDLE = 99999;
     private const MAX_CAPACITY = 64;
     private SimpleInventory $inventory;
 
     public function __construct(){
-        parent::__construct(new ItemIdentifier(self::BUNDLE, 0));
-        $this->inventory = new SimpleInventory(1);
+        parent::__construct(VanillaItems::BUNDLE()->getId(), 0, "Bundle");
+        $this->inventory = new SimpleInventory(1); // Bundle memiliki 1 slot inventory internal
     }
 
     public function getInventory(): SimpleInventory{
@@ -32,7 +32,7 @@ class Bundle extends Item implements InventoryHolder{
         $totalWeight += $this->getItemSize($item);
 
         if($totalWeight > self::MAX_CAPACITY){
-            return false;
+            return false; // Kapasitas penuh
         }
 
         $this->inventory->addItem($item);
@@ -43,19 +43,19 @@ class Bundle extends Item implements InventoryHolder{
         return $item->getMaxStackSize() === 1 ? self::MAX_CAPACITY : (int) ceil(self::MAX_CAPACITY / $item->getMaxStackSize());
     }
 
-    public function writeSaveData(CompoundTag $nbt): void{
-        parent::writeSaveData($nbt);
+    public function onSaveNBT(): CompoundTag{
+        $nbt = new CompoundTag();
         $items = [];
-        foreach($this->inventory->getContents() as $item){
+        foreach ($this->inventory->getContents() as $item) {
             $items[] = $item->nbtSerialize();
         }
-        $nbt->setTag("BundleItems", CompoundTag::createFromArray($items));
+        $nbt->setTag("BundleItems", new ListTag($items));
+        return $nbt;
     }
 
-    public function readSaveData(CompoundTag $nbt): void{
-        parent::readSaveData($nbt);
-        if($nbt->hasTag("BundleItems")){
-            foreach($nbt->getListTag("BundleItems")->getValue() as $itemTag){
+    public function onLoadNBT(CompoundTag $nbt): void{
+        if ($nbt->getTag("BundleItems") !== null) {
+            foreach ($nbt->getListTag("BundleItems")->getValue() as $itemTag) {
                 $this->inventory->addItem(Item::nbtDeserialize($itemTag));
             }
         }
