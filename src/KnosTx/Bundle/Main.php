@@ -10,6 +10,6 @@ use pocketmine\item\VanillaItems;
 
 class Main extends PluginBase{
     public function onEnable(): void{
-        VanillaItems::register(new Bundle(), true);
+        VanillaItemsCustom::register(new Bundle(), true);
     }
 }
