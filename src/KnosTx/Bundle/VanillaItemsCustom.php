@@ -4,7 +4,7 @@ namespace KnosTx\Bundle;
 
 use pocketmine\item\VanillaItems;
 
-class VanillaItemsCustom extends VanillaItems{
+final class VanillaItemsCustom extends VanillaItems{
     public static function registerCustom(){
         parent::register();
     }
