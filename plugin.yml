@@ -1,0 +1,6 @@
+name: Bundle
+main: KnosTx\Bundle\Main
+version: 1.0.0
+api: 5.0.0
+author: NurAzli
+description: Adds Bundle item functionality with inventory support.
