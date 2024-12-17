@@ -14,10 +14,11 @@ use pocketmine\nbt\tag\ListTag;
 class Bundle extends Item implements InventoryHolder{
     private const MAX_CAPACITY = 64;
     private SimpleInventory $inventory;
+    public const BUNDLE = 88888;
 
     public function __construct(){
-        parent::__construct(VanillaItems::BUNDLE()->getId(), 0, "Bundle");
-        $this->inventory = new SimpleInventory(1); // Bundle memiliki 1 slot inventory internal
+        parent::__construct(self::BUNDLE, "Bundle");
+        $this->inventory = new SimpleInventory(1);
     }
 
     public function getInventory(): SimpleInventory{
@@ -32,7 +33,7 @@ class Bundle extends Item implements InventoryHolder{
         $totalWeight += $this->getItemSize($item);
 
         if($totalWeight > self::MAX_CAPACITY){
-            return false; // Kapasitas penuh
+            return false;
         }
 
         $this->inventory->addItem($item);
